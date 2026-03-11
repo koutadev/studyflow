@@ -1,6 +1,27 @@
 # 📚 StudyFlow - AI学習記録＆進捗管理アプリ
 
 AIが最適な学習計画を生成する、学習管理プラットフォーム。
+## 📸 スクリーンショット
+
+### ダッシュボード
+KPI 4種（今日の学習・週間目標・連続学習日数・総学習時間）+ 目標別進捗 + 週間学習時間グラフ
+![Dashboard](docs/screenshots/dashboard.png)
+
+### 目標管理
+学習目標のカード形式一覧。カテゴリ・期限・進捗率を表示
+![Goals](docs/screenshots/goals.png)
+
+### 学習記録
+学習時間・目標・調子・メモを記録。学習履歴をタイムライン表示
+![Study Logs](docs/screenshots/study-logs.png)
+
+### 統計（学習ストリーク・週別推移）
+学習ストリーク、週別・月別の学習時間推移をグラフで可視化
+![Statistics 1](docs/screenshots/statics-1.png)
+
+### 統計（目標別・カテゴリ別分析）
+目標別の学習時間比較、カテゴリ別構成比をドーナツチャートで表示
+![Statistics 2](docs/screenshots/statics-2.png)
 
 ## ⚡ 技術スタック
 

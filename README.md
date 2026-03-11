@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📚 StudyFlow - AI学習記録＆進捗管理アプリ
 
-## Getting Started
+AIが最適な学習計画を生成する、学習管理プラットフォーム。
 
-First, run the development server:
+## ⚡ 技術スタック
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+| カテゴリ | 技術 |
+|---------|------|
+| Frontend | Next.js 14 / TypeScript / Tailwind CSS |
+| Backend | Supabase（Auth / Database / Storage） |
+| Database | PostgreSQL（Supabase） |
+| AI | Claude API（Anthropic） |
+| Payment | Stripe（フリーミアムモデル） |
+| Deploy | Vercel |
+
+## 🚀 主な機能
+
+- **ダッシュボード**: 学習時間・進捗率・連続学習日数をリアルタイム表示
+- **目標管理**: 学習目標の設定・期限管理・達成率の可視化
+- **学習記録**: 日々の学習内容・時間を記録し、カレンダーで振り返り
+- **AI学習計画**: Claude APIが目標に合わせた最適な学習プランを自動生成
+- **統計・分析**: 学習時間の推移、カテゴリ別の学習量をグラフで可視化
+- **認証**: Supabase Authによるメール認証
+- **決済**: Stripe連携のフリーミアムモデル（無料プラン / Proプラン）
+
+## 🔧 こだわったポイント
+
+### AI駆動の学習支援
+- Claude APIを活用し、ユーザーの目標・進捗に基づいた学習計画を自動生成
+- プロンプトエンジニアリングにより、実用的で具体的な提案を実現
+
+### フリーミアム設計
+- Stripe Webhookによるサブスクリプション管理
+- 無料プランでも基本機能は全て利用可能
+- Proプランで AI学習計画の生成回数を拡張
+
+### 開発スタイル
+- Claude Codeを活用したAI駆動開発
+- 企画から本番デプロイまで4日間で完成
+
+## 🏗️ セットアップ
+
+### 前提条件
+
+- Node.js 18+
+- npm
+- Supabaseアカウント
+- Anthropic APIキー
+- Stripeアカウント
+
+### 環境変数
+
+```
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+ANTHROPIC_API_KEY=your-anthropic-api-key
+STRIPE_SECRET_KEY=your-stripe-secret-key
+STRIPE_WEBHOOK_SECRET=your-stripe-webhook-secret
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your-stripe-publishable-key
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 手順
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+git clone https://github.com/koutadev/studyflow.git
+cd studyflow
+npm install
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+http://localhost:3000 でアクセス
 
-## Learn More
+## 📐 DB設計（Supabase / PostgreSQL）
 
-To learn more about Next.js, take a look at the following resources:
+主要テーブル:
+- **profiles** — ユーザープロフィール・プラン情報
+- **goals** — 学習目標（期限・カテゴリ・達成率）
+- **study_logs** — 学習記録（日時・時間・内容・カテゴリ）
+- **ai_plans** — AI生成の学習計画
+- **subscriptions** — Stripeサブスクリプション情報
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 👤 作者
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Kouta** - 元寿司職人 → PHP バックエンドエンジニア
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Portfolio: https://portfolio-chi-sage-eud0tx0pxw.vercel.app
+- GitHub: [@koutadev](https://github.com/koutadev)

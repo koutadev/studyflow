@@ -31,7 +31,7 @@ export default async function LogPage() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <LogForm goals={goals || []} />
-        <LogHistory logs={logs || []} />
+        <LogHistory logs={logs || []} goals={goals || []} />
       </div>
     </div>
   )

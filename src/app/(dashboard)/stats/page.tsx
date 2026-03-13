@@ -6,6 +6,7 @@ import { GoalComparison } from '@/components/stats/GoalComparison'
 import { StudyStreak } from '@/components/stats/StudyStreak'
 import { CategoryBreakdown } from '@/components/stats/CategoryBreakdown'
 import { StatsOverview } from '@/components/stats/StatsOverview'
+import { PomodoroStats } from '@/components/stats/PomodoroStats'
 import { Card, CardContent } from '@/components/ui/card'
 import { Lock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -92,6 +93,9 @@ export default async function StatsPage() {
   // 概要統計
   const overviewData = calculateOverview(logs)
 
+  // ポモドーロ統計
+  const pomodoroData = calculatePomodoroData(logs, weekStart, now)
+
   return (
     <div className="space-y-6">
       <div>
@@ -109,6 +113,12 @@ export default async function StatsPage() {
 
       {/* 週別グラフ */}
       <WeeklyChart data={weeklyData} />
+
+      {/* ポモドーロ統計 */}
+      <PomodoroStats
+        totalSessions={pomodoroData.totalSessions}
+        weeklyData={pomodoroData.weeklyData}
+      />
 
       {/* 有料プラン限定機能 */}
       {isPaid ? (
@@ -302,6 +312,31 @@ function calculateStreak(logs: StudyLog[]) {
   }
 
   return { currentStreak, longestStreak, totalDays }
+}
+
+function calculatePomodoroData(logs: StudyLog[], startDate: Date, endDate: Date) {
+  const pomodoroLogs = logs.filter((log) => log.note?.includes('ポモドーロ'))
+  const totalSessions = pomodoroLogs.length
+
+  const weeks: { week: string; sessions: number }[] = []
+  let currentWeekStart = startOfWeek(startDate, { weekStartsOn: 1 })
+
+  while (currentWeekStart <= endDate) {
+    const currentWeekEnd = endOfWeek(currentWeekStart, { weekStartsOn: 1 })
+    const weekLogs = pomodoroLogs.filter((log) => {
+      const logDate = parseISO(log.study_date)
+      return logDate >= currentWeekStart && logDate <= currentWeekEnd
+    })
+
+    weeks.push({
+      week: format(currentWeekStart, 'M/d'),
+      sessions: weekLogs.length,
+    })
+
+    currentWeekStart = subWeeks(currentWeekStart, -1)
+  }
+
+  return { totalSessions, weeklyData: weeks }
 }
 
 function calculateOverview(logs: StudyLog[]) {

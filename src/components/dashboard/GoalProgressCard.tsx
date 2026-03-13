@@ -1,5 +1,6 @@
 'use client'
 
+import { memo } from 'react'
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
@@ -17,7 +18,7 @@ const categoryLabels: Record<string, string> = {
   other: 'その他',
 }
 
-export function GoalProgressCard({ goals }: GoalProgressCardProps) {
+export const GoalProgressCard = memo(function GoalProgressCard({ goals }: GoalProgressCardProps) {
   if (goals.length === 0) {
     return (
       <Card>
@@ -80,4 +81,4 @@ export function GoalProgressCard({ goals }: GoalProgressCardProps) {
       </CardContent>
     </Card>
   )
-}
+})

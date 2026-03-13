@@ -1,5 +1,6 @@
 'use client'
 
+import { memo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   BarChart,
@@ -17,7 +18,7 @@ interface WeeklyChartProps {
   }[]
 }
 
-export function WeeklyChart({ data }: WeeklyChartProps) {
+export const WeeklyChart = memo(function WeeklyChart({ data }: WeeklyChartProps) {
   const formatMinutes = (minutes: number) => {
     const hours = Math.floor(minutes / 60)
     const mins = minutes % 60
@@ -85,4 +86,4 @@ export function WeeklyChart({ data }: WeeklyChartProps) {
       </CardContent>
     </Card>
   )
-}
+})

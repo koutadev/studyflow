@@ -1,5 +1,6 @@
 'use client'
 
+import { memo } from 'react'
 import { Clock, Target, Flame, TrendingUp } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 
@@ -11,7 +12,7 @@ interface SummaryCardsProps {
   streak: number
 }
 
-export function SummaryCards({
+export const SummaryCards = memo(function SummaryCards({
   todayMinutes,
   weeklyMinutes,
   weeklyGoalMinutes,
@@ -100,4 +101,4 @@ export function SummaryCards({
       </Card>
     </div>
   )
-}
+})

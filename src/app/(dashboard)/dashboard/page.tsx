@@ -8,6 +8,7 @@ import { SummaryCards } from '@/components/dashboard/SummaryCards'
 import { GoalProgressCard } from '@/components/dashboard/GoalProgressCard'
 import { WeeklyChart } from '@/components/dashboard/WeeklyChart'
 import { StreakBadge } from '@/components/dashboard/StreakBadge'
+import { QuickStartCard } from '@/components/dashboard/QuickStartCard'
 import { startOfWeek, endOfWeek, subDays, format } from 'date-fns'
 import type { Profile, Goal, StudyLog } from '@/types/database'
 
@@ -74,35 +75,51 @@ async function getDashboardData(userId: string) {
   const totalMinutes = totalLogs?.reduce((sum, log) => sum + log.duration_minutes, 0) || 0
   const totalHours = Math.floor(totalMinutes / 60)
 
-  // ストリーク計算
-  let streak = 0
-  let checkDate = today
-  while (true) {
-    const dateStr = format(checkDate, 'yyyy-MM-dd')
-    const { data: dayLogs } = await supabase
-      .from('study_logs')
-      .select('id')
-      .eq('user_id', userId)
-      .eq('study_date', dateStr)
-      .limit(1)
+  // ストリーク計算（1クエリで過去のユニーク日付を取得して計算）
+  const { data: streakLogs } = await supabase
+    .from('study_logs')
+    .select('study_date')
+    .eq('user_id', userId)
+    .order('study_date', { ascending: false })
+    .limit(400) as { data: Pick<StudyLog, 'study_date'>[] | null }
 
-    if (dayLogs && dayLogs.length > 0) {
-      streak++
-      checkDate = subDays(checkDate, 1)
-    } else if (format(checkDate, 'yyyy-MM-dd') === todayStr) {
-      // 今日まだ記録がない場合は昨日からチェック
-      checkDate = subDays(checkDate, 1)
-    } else {
-      break
+  let streak = 0
+  if (streakLogs && streakLogs.length > 0) {
+    const uniqueDates = [...new Set(streakLogs.map((l) => l.study_date))].sort().reverse()
+    let checkDate = today
+
+    // 今日記録がなければ昨日から開始
+    if (uniqueDates[0] !== todayStr) {
+      checkDate = subDays(today, 1)
     }
 
-    // 無限ループ防止
-    if (streak > 365) break
+    for (const date of uniqueDates) {
+      const expected = format(checkDate, 'yyyy-MM-dd')
+      if (date === expected) {
+        streak++
+        checkDate = subDays(checkDate, 1)
+      } else if (date < expected) {
+        break
+      }
+    }
   }
+
+  // 最近学習した目標（直近のstudy_logsからユニークなgoal_idを取得）
+  const { data: recentLogs } = await supabase
+    .from('study_logs')
+    .select('goal_id')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(10) as { data: Pick<StudyLog, 'goal_id'>[] | null }
+
+  const recentGoalIds = [...new Set(recentLogs?.map((l) => l.goal_id) || [])]
+  const recentGoals = (goals || []).filter((g) => recentGoalIds.includes(g.id))
+    .sort((a, b) => recentGoalIds.indexOf(a.id) - recentGoalIds.indexOf(b.id))
 
   return {
     profile,
     goals: goals || [],
+    recentGoals: recentGoals.slice(0, 3),
     todayMinutes,
     weeklyMinutes,
     weeklyGoalMinutes: 20 * 60, // 仮に週20時間目標
@@ -126,6 +143,8 @@ export default async function DashboardPage() {
         streak={data.streak}
         displayName={data.profile?.display_name || 'ユーザー'}
       />
+
+      <QuickStartCard goals={data.goals} recentGoals={data.recentGoals} />
 
       <SummaryCards
         todayMinutes={data.todayMinutes}

@@ -1,9 +1,26 @@
-import { Loader2 } from 'lucide-react'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export default function DashboardLoading() {
   return (
-    <div className="flex items-center justify-center py-16">
-      <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
+    <div className="space-y-6">
+      {/* ヘッダー */}
+      <div className="space-y-2">
+        <Skeleton className="h-8 w-48" />
+        <Skeleton className="h-4 w-72" />
+      </div>
+
+      {/* カード群 */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <Skeleton key={i} className="h-24 rounded-lg" />
+        ))}
+      </div>
+
+      {/* コンテンツエリア */}
+      <div className="grid gap-6 lg:grid-cols-2">
+        <Skeleton className="h-72 rounded-lg" />
+        <Skeleton className="h-72 rounded-lg" />
+      </div>
     </div>
   )
 }

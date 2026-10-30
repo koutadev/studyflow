@@ -1,6 +1,18 @@
 # 📚 StudyFlow - AI学習記録＆進捗管理アプリ
 
 AIが最適な学習計画を生成する、学習管理プラットフォーム。
+## 🔗 デモ
+
+https://studyflow-indol.vercel.app
+
+実際に動作を確認いただけます。以下のアカウントでログインしてください。
+
+| 項目 | 値 |
+|---|---|
+| メールアドレス | demo@studyflow.app |
+| パスワード | demo1234 |
+
+※デモ用のデータが登録されています。自由に操作いただいて構いません。
 ## 📸 スクリーンショット
 
 ### ダッシュボード
@@ -16,12 +28,12 @@ KPI 4種（今日の学習・週間目標・連続学習日数・総学習時間
 ![Study Logs](docs/screenshots/study-logs.png)
 
 ### 統計（学習ストリーク・週別推移）
-学習ストリーク、週別・月別の学習時間推移をグラフで可視化
-![Statistics 1](docs/screenshots/statics-1.png)
+学習ストリーク、週別の学習時間推移、ポモドーロセッション数をグラフで可視化
+![Statistics Overview](docs/screenshots/statistics-overview.png)
 
 ### 統計（目標別・カテゴリ別分析）
 目標別の学習時間比較、カテゴリ別構成比をドーナツチャートで表示
-![Statistics 2](docs/screenshots/statics-2.png)
+![Statistics Breakdown](docs/screenshots/statistics-breakdown.png)
 
 ## ⚡ 技術スタック
 

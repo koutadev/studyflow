@@ -1,0 +1,32 @@
+name: Supabase Keep Alive
+
+on:
+  schedule:
+    - cron: '10 0 * * 1,4'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST API
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          set -eu
+
+          status=$(curl -sS -o /tmp/body.txt -w '%{http_code}' \
+            "${SUPABASE_URL}/rest/v1/profiles?select=id&limit=1" \
+            -H "apikey: ${SUPABASE_ANON_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_ANON_KEY}")
+
+          echo "HTTP status: ${status}"
+          cat /tmp/body.txt
+
+          if [ "${status}" = "200" ] || [ "${status}" = "401" ] || [ "${status}" = "403" ]; then
+            echo "Supabase is awake"
+          else
+            echo "::error::Unexpected response ${status}"
+            exit 1
+          fi
